@@ -9,7 +9,8 @@ public class GunProperties : MonoBehaviour {
     public void Shoot() {
         GameObject newBullet = Instantiate(bullet, transform.parent.position, transform.parent.rotation);
         newBullet.GetComponent<BulletMovement>().SetGunCarrier(transform.parent.gameObject);
-        newBullet.GetComponent<BulletMovement>().SetDirection(transform.parent.GetComponentInChildren<CameraMovement>().CurrentRotation); //keep everything above this line
+        newBullet.GetComponent<BulletMovement>().SetDirection(transform.parent.GetComponentInChildren<CameraMovement>().CurrentRotation);
+        newBullet.GetComponent<BulletMovement>().SetInitialPosition(transform.position);    //keep everything above this line
     }
 
     //getters

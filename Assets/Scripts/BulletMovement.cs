@@ -13,15 +13,17 @@ public class BulletMovement : MonoBehaviour {
     [SerializeField] private float speed = 10f;
     [SerializeField] private float maxDistance = 500f;
     private Vector3 direction;
+    private Vector3 initialPosition;
 
     void Start() {
         rigidBody = GetComponent<Rigidbody>();
     }
 
     void Update() {
-        if (direction != null) {
-            if (Vector3.Distance(direction, transform.position) < maxDistance) {
+        if (initialPosition != null) {
+            if (Vector3.Distance(initialPosition, transform.position) < maxDistance) {
                 rigidBody.velocity = direction * speed;
+                Debug.Log(Vector3.Distance(initialPosition, transform.position));
             } else {
                 Destroy(gameObject);
             }
@@ -49,6 +51,9 @@ public class BulletMovement : MonoBehaviour {
     //setters
     public void SetDirection(Vector3 vector) {
         direction = vector;
+    }
+    public void SetInitialPosition(Vector3 vector) {
+        initialPosition = vector;
     }
     public void SetGunCarrier(GameObject player) {
         gunCarrier = player;
