@@ -23,7 +23,6 @@ public class BulletMovement : MonoBehaviour {
         if (initialPosition != null) {
             if (Vector3.Distance(initialPosition, transform.position) < maxDistance) {
                 rigidBody.velocity = direction * speed;
-                Debug.Log(Vector3.Distance(initialPosition, transform.position));
             } else {
                 Destroy(gameObject);
             }

@@ -6,9 +6,10 @@ public class VictoryTrigger : MonoBehaviour {
     private const string playerTag = "Player";
     private const string enemyTag = "Enemy";
 
-    private bool hasEnemies = false;
+    private bool hasEnemies;
 
     private void OnTriggerEnter(Collider collision) {
+        hasEnemies = false;
         GameObject collidedObject = collision.gameObject;
         if (collidedObject.tag == playerTag) {
             for (int i = 0; i < transform.parent.childCount; i++) {
@@ -17,9 +18,9 @@ public class VictoryTrigger : MonoBehaviour {
                     break;
                 }
             }
-        }
-        if (!hasEnemies) {
-            SceneManager.LoadScene(0);
+            if (!hasEnemies) {
+                SceneManager.LoadScene(0);
+            }
         }
     }
 }
