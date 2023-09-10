@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class SetTargetFrameRate : MonoBehaviour {
+public class FrameRateCap : MonoBehaviour {
 
     [SerializeField] private int targetFrameRate = 600;
 

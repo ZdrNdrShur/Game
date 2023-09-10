@@ -15,11 +15,11 @@ public class BulletMovement : MonoBehaviour {
     private Vector3 direction;
     private Vector3 initialPosition;
 
-    void Start() {
+    private void Start() {
         rigidBody = GetComponent<Rigidbody>();
     }
 
-    void Update() {
+    private void Update() {
         if (initialPosition != null) {
             if (Vector3.Distance(initialPosition, transform.position) < maxDistance) {
                 rigidBody.velocity = direction * speed;

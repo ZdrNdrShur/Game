@@ -33,7 +33,7 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "CycleInventory",
+                    "name": "Cycle Inventory",
                     "type": "Value",
                     "id": "14bcc014-47df-4c20-a24b-c6607055bbac",
                     "expectedControlType": "Axis",
@@ -45,6 +45,24 @@
                     "name": "Shoot",
                     "type": "Button",
                     "id": "5a4215ad-004d-42d3-bc81-4a3f06a0f9f1",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Toggle Auto",
+                    "type": "Button",
+                    "id": "944df7c0-3cfe-44ae-80b9-77c917a381c4",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Drop Weapon",
+                    "type": "Button",
+                    "id": "f2b5a7b8-e037-4131-ad46-27427cfba8dd",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -136,7 +154,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "CycleInventory",
+                    "action": "Cycle Inventory",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -148,6 +166,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "Shoot",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "65115dbb-f274-41df-82f7-304de3f6c875",
+                    "path": "<Keyboard>/t",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Toggle Auto",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7d2aabd0-5267-4a20-9c1c-ac9ccf413d25",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Drop Weapon",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

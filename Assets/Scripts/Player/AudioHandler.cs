@@ -4,7 +4,7 @@ public class AudioHandler : MonoBehaviour {
 
     private AudioSource[] playerAudio;
 
-    void Start() {
+    private void Start() {
         playerAudio = GetComponents<AudioSource>();
     }
 

@@ -6,7 +6,7 @@ public class EnemyProperties : MonoBehaviour {
 
     [SerializeField] private int health = 100;
     [SerializeField] private int score = 10;
-    [SerializeField] private int damage = 20;
+    [SerializeField] private int collisionDamage = 20;
 
     public void TakeDamage(int amount) {
         health -= amount;
@@ -17,8 +17,8 @@ public class EnemyProperties : MonoBehaviour {
 
     private void OnCollisionEnter(Collision collision) {
         GameObject hitObject = collision.gameObject;
-        if (hitObject.tag == playerTag) {
-            hitObject.GetComponent<PlayerProperties>().TakeDamage(damage);
+        if (hitObject.CompareTag(playerTag)) {
+            hitObject.GetComponent<PlayerProperties>().TakeDamage(collisionDamage);
         }
     }
 

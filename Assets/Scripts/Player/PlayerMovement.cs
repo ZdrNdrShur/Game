@@ -12,7 +12,7 @@ public class PlayerMovement : MonoBehaviour {
     private float currentMoveZ;
     private Vector3 movementVector;
 
-    void Start() {
+    private void Start() {
         inputActions = new PlayerInputActions();
         inputActions.PlayerDefault.Move.Enable();
         inputActions.PlayerDefault.Jump.Enable();
@@ -25,7 +25,7 @@ public class PlayerMovement : MonoBehaviour {
         movementVector = new Vector3(0f, 0f, 0f);
     }
 
-    void Update() {
+    private void Update() {
         currentMoveX = inputActions.PlayerDefault.Move.ReadValue<Vector2>().y;
         currentMoveY = rigidBody.velocity.y;
         currentMoveZ = -inputActions.PlayerDefault.Move.ReadValue<Vector2>().x;
@@ -51,7 +51,7 @@ public class PlayerMovement : MonoBehaviour {
         rigidBody.velocity = movementVector;
     }
 
-    public void DisableMovement() {
+    public void DisableInput() {
         inputActions.PlayerDefault.Move.Disable();
         inputActions.PlayerDefault.Jump.Disable();
     }

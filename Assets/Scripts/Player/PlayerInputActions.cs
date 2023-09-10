@@ -55,7 +55,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""CycleInventory"",
+                    ""name"": ""Cycle Inventory"",
                     ""type"": ""Value"",
                     ""id"": ""14bcc014-47df-4c20-a24b-c6607055bbac"",
                     ""expectedControlType"": ""Axis"",
@@ -67,6 +67,24 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""name"": ""Shoot"",
                     ""type"": ""Button"",
                     ""id"": ""5a4215ad-004d-42d3-bc81-4a3f06a0f9f1"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Toggle Auto"",
+                    ""type"": ""Button"",
+                    ""id"": ""944df7c0-3cfe-44ae-80b9-77c917a381c4"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Drop Weapon"",
+                    ""type"": ""Button"",
+                    ""id"": ""f2b5a7b8-e037-4131-ad46-27427cfba8dd"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -158,7 +176,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""CycleInventory"",
+                    ""action"": ""Cycle Inventory"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -172,6 +190,28 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""Shoot"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""65115dbb-f274-41df-82f7-304de3f6c875"",
+                    ""path"": ""<Keyboard>/t"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Toggle Auto"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7d2aabd0-5267-4a20-9c1c-ac9ccf413d25"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Drop Weapon"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -183,8 +223,10 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_PlayerDefault_Move = m_PlayerDefault.FindAction("Move", throwIfNotFound: true);
         m_PlayerDefault_Jump = m_PlayerDefault.FindAction("Jump", throwIfNotFound: true);
         m_PlayerDefault_Rotate = m_PlayerDefault.FindAction("Rotate", throwIfNotFound: true);
-        m_PlayerDefault_CycleInventory = m_PlayerDefault.FindAction("CycleInventory", throwIfNotFound: true);
+        m_PlayerDefault_CycleInventory = m_PlayerDefault.FindAction("Cycle Inventory", throwIfNotFound: true);
         m_PlayerDefault_Shoot = m_PlayerDefault.FindAction("Shoot", throwIfNotFound: true);
+        m_PlayerDefault_ToggleAuto = m_PlayerDefault.FindAction("Toggle Auto", throwIfNotFound: true);
+        m_PlayerDefault_DropWeapon = m_PlayerDefault.FindAction("Drop Weapon", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -251,6 +293,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_PlayerDefault_Rotate;
     private readonly InputAction m_PlayerDefault_CycleInventory;
     private readonly InputAction m_PlayerDefault_Shoot;
+    private readonly InputAction m_PlayerDefault_ToggleAuto;
+    private readonly InputAction m_PlayerDefault_DropWeapon;
     public struct PlayerDefaultActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -260,6 +304,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         public InputAction @Rotate => m_Wrapper.m_PlayerDefault_Rotate;
         public InputAction @CycleInventory => m_Wrapper.m_PlayerDefault_CycleInventory;
         public InputAction @Shoot => m_Wrapper.m_PlayerDefault_Shoot;
+        public InputAction @ToggleAuto => m_Wrapper.m_PlayerDefault_ToggleAuto;
+        public InputAction @DropWeapon => m_Wrapper.m_PlayerDefault_DropWeapon;
         public InputActionMap Get() { return m_Wrapper.m_PlayerDefault; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -284,6 +330,12 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Shoot.started += instance.OnShoot;
             @Shoot.performed += instance.OnShoot;
             @Shoot.canceled += instance.OnShoot;
+            @ToggleAuto.started += instance.OnToggleAuto;
+            @ToggleAuto.performed += instance.OnToggleAuto;
+            @ToggleAuto.canceled += instance.OnToggleAuto;
+            @DropWeapon.started += instance.OnDropWeapon;
+            @DropWeapon.performed += instance.OnDropWeapon;
+            @DropWeapon.canceled += instance.OnDropWeapon;
         }
 
         private void UnregisterCallbacks(IPlayerDefaultActions instance)
@@ -303,6 +355,12 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Shoot.started -= instance.OnShoot;
             @Shoot.performed -= instance.OnShoot;
             @Shoot.canceled -= instance.OnShoot;
+            @ToggleAuto.started -= instance.OnToggleAuto;
+            @ToggleAuto.performed -= instance.OnToggleAuto;
+            @ToggleAuto.canceled -= instance.OnToggleAuto;
+            @DropWeapon.started -= instance.OnDropWeapon;
+            @DropWeapon.performed -= instance.OnDropWeapon;
+            @DropWeapon.canceled -= instance.OnDropWeapon;
         }
 
         public void RemoveCallbacks(IPlayerDefaultActions instance)
@@ -327,5 +385,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         void OnRotate(InputAction.CallbackContext context);
         void OnCycleInventory(InputAction.CallbackContext context);
         void OnShoot(InputAction.CallbackContext context);
+        void OnToggleAuto(InputAction.CallbackContext context);
+        void OnDropWeapon(InputAction.CallbackContext context);
     }
 }

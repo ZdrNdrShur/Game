@@ -8,12 +8,12 @@ public class ItemBobbing : MonoBehaviour {
     private float currentBobbingMove;
     private float currentBobbingRotate;
 
-    void Start() {
+    private void Start() {
         currentBobbingMove = 0f;
         currentBobbingRotate = 0f;
     }
 
-    void FixedUpdate() {
+    private void FixedUpdate() {
         if (currentBobbingMove <= -maxBobbingMove || currentBobbingMove >= maxBobbingMove) {
             bobbingSpeedMove = -bobbingSpeedMove;
         }

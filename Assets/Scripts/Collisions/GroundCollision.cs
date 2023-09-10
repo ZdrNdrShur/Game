@@ -6,7 +6,7 @@ public class GroundCollision : MonoBehaviour {
 
     private void OnCollisionEnter(Collision collision) {
         GameObject collidedObject = collision.gameObject;
-        if (collidedObject.tag == playerTag) {
+        if (collidedObject.CompareTag(playerTag)) {
             collidedObject.GetComponent<MovementProperties>().Ground();
         }
     }

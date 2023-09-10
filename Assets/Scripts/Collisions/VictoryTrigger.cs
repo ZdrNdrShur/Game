@@ -11,9 +11,9 @@ public class VictoryTrigger : MonoBehaviour {
     private void OnTriggerEnter(Collider collision) {
         hasEnemies = false;
         GameObject collidedObject = collision.gameObject;
-        if (collidedObject.tag == playerTag) {
+        if (collidedObject.CompareTag(playerTag)) {
             for (int i = 0; i < transform.parent.childCount; i++) {
-                if (transform.parent.GetChild(i).tag == enemyTag) {
+                if (transform.parent.GetChild(i).CompareTag(enemyTag)) {
                     hasEnemies = true;
                     break;
                 }

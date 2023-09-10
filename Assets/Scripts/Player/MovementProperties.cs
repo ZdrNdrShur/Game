@@ -14,10 +14,10 @@ public class MovementProperties : MonoBehaviour {
     [SerializeField] private int maxAmountOfJumps = 1;
     private int currentNumberOfJumps;
 
-    void Start() {
+    private void Start() {
         playerAudio = GetComponent<AudioHandler>();
         groundLayer = LayerMask.GetMask(groundLayerName);
-        rayLength = GetComponent<CapsuleCollider>().height / 2;
+        rayLength = GetComponent<CapsuleCollider>().height / 2;     //may be changed later
         rayLength += 0.003f;
         Ground();
     }
@@ -30,6 +30,14 @@ public class MovementProperties : MonoBehaviour {
         currentNumberOfJumps++;
     }
 
+    private bool IsGrounded() {
+        if (Physics.Raycast(transform.position, Vector3.down, out _, rayLength, groundLayer)) {
+            Ground();
+            return true;
+        }
+        return false;
+    }
+
     public bool CanJump() {
         if (IsGrounded()) {
             Jump();
@@ -37,21 +45,13 @@ public class MovementProperties : MonoBehaviour {
             return true;
         } else {
             if (currentNumberOfJumps == 0) {
-                Jump();
+                Jump();     //in the air you have one less jump
             }
             if (currentNumberOfJumps < maxAmountOfJumps) {
                 Jump();
                 playerAudio.Jump();
                 return true;
             }
-        }
-        return false;
-    }
-
-    private bool IsGrounded() {
-        if (Physics.Raycast(transform.position, Vector3.down, out _, rayLength, groundLayer)) {
-            Ground();
-            return true;
         }
         return false;
     }

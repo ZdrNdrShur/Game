@@ -26,7 +26,7 @@ public class EnemyBehaviour : MonoBehaviour {
     [SerializeField] private float timeBetweenAttacks = 1f;
     private bool alreadyAttacked;
 
-    void Start() {
+    private void Start() {
         navMesh = GetComponent<NavMeshAgent>();
         player = GameObject.FindWithTag(playerTag).transform;
         playerLayer = LayerMask.GetMask(playerLayerName);
@@ -35,7 +35,7 @@ public class EnemyBehaviour : MonoBehaviour {
         rayLength += 0.003f;
     }
 
-    void Update() {
+    private void Update() {
         playerInSightRange = Physics.CheckSphere(transform.position, sightRange, playerLayer);
         playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, playerLayer);
         if (!playerInSightRange && !playerInAttackRange) {

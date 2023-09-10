@@ -2,12 +2,13 @@ using UnityEngine;
 
 public class ItemHandler : MonoBehaviour {
 
-    [SerializeField] private GameObject gun;
+    [SerializeField] private GameObject pistol;
+    [SerializeField] private GameObject rifle;
 
     private InventoryHandler inventoryHandler;
     private MovementProperties movementProperties;
 
-    void Start() {
+    private void Start() {
         inventoryHandler = GetComponent<InventoryHandler>();
         movementProperties = GetComponent<MovementProperties>();
     }
@@ -17,8 +18,14 @@ public class ItemHandler : MonoBehaviour {
             case "UPGRADEIncreaseMaxAmountOfJumps":
             movementProperties.IncreaseMaxAmountOfJumps();
             break;
-            case "WEAPONBasicGun":
-            inventoryHandler.AddItemToInventory(Instantiate(gun, transform));
+            case "UPGRADEIncreaseInventorySize":
+            inventoryHandler.IncreaseInventorySize();
+            break;
+            case "WEAPONPistol":
+            inventoryHandler.AddItemToInventory(Instantiate(pistol, transform));
+            break;
+            case "WEAPONRifle":
+            inventoryHandler.AddItemToInventory(Instantiate(rifle, transform));
             break;
             default:
             Debug.Log("Modifier Error - " + modifier);

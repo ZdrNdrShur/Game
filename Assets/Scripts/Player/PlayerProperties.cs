@@ -8,7 +8,7 @@ public class PlayerProperties : MonoBehaviour {
     [SerializeField] private int health = 100;
     private int score = 0;
 
-    void Start() {
+    private void Start() {
         playerAudio = GetComponent<AudioHandler>();
         UILogicManager.GetComponent<UILogic>().UpdateScore(score);
         UILogicManager.GetComponent<UILogic>().UpdateHealth(health);
@@ -18,9 +18,9 @@ public class PlayerProperties : MonoBehaviour {
         health -= amount;
         UILogicManager.GetComponent<UILogic>().UpdateHealth(health);
         if (health <= 0) {
-            gameObject.GetComponent<PlayerMovement>().DisableMovement();
-            gameObject.GetComponent<WeaponHandler>().DisableShoot();
-            UILogicManager.GetComponent<UILogic>().DisableCycleInventory();
+            gameObject.GetComponent<PlayerMovement>().DisableInput();
+            gameObject.GetComponent<WeaponHandler>().DisableInput();
+            UILogicManager.GetComponent<UILogic>().DisableInput();
             UILogicManager.GetComponent<UILogic>().EnableGameOverScreen();
         }
         if (health <= 0) {

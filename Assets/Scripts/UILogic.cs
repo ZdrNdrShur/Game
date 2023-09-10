@@ -1,27 +1,34 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class UILogic : MonoBehaviour {
 
     private const string SCORE_TEXT = "Score: ";
     private const string HEALTH_TEXT = "Health: ";
 
+    [SerializeField] private GameObject player;
+    [SerializeField] private GameObject item;
     [SerializeField] private GameObject gameOverScreen;
     [SerializeField] private GameObject scoreField;
     [SerializeField] private GameObject healthField;
     [SerializeField] private GameObject itemSlot;
+
     private PlayerInputActions inputActions;
     private GameObject[] inventory = new GameObject[0];
-    
+
+    [SerializeField] private float spawnedItemDistanceMultiplyer = 3;
+
     private int currentSelectedItem = 0;
 
-    void Start() {
+    private void Start() {
         inputActions = new PlayerInputActions();
         inputActions.PlayerDefault.CycleInventory.Enable();
+        inputActions.PlayerDefault.DropWeapon.Enable();
     }
 
-    void Update() {
+    private void Update() {
         float scrollAction = inputActions.PlayerDefault.CycleInventory.ReadValue<float>();
         if (scrollAction != 0) {
             if (scrollAction < 0) {
@@ -31,10 +38,20 @@ public class UILogic : MonoBehaviour {
             }
             UpdateSelectedItem((int)scrollAction);
         }
+        if (inputActions.PlayerDefault.DropWeapon.triggered) {
+            if (player.GetComponent<InventoryHandler>().Inventory[currentSelectedItem] != null) {
+                GameObject itemInstance = item;
+                itemInstance.GetComponent<ItemFunctionality>().SetUpgrade(player.GetComponent<InventoryHandler>().Inventory[currentSelectedItem].GetComponent<GunProperties>().ItemName());
+                player.GetComponent<InventoryHandler>().DropItem(currentSelectedItem);
+                Vector3 playerPosition = player.transform.position + player.transform.forward * spawnedItemDistanceMultiplyer;      //spawns the item ahead of the player
+                Instantiate(itemInstance, playerPosition, player.transform.rotation, player.transform.parent);
+            }
+        }
     }
 
     private void UpdateSelectedItem(int scrollAction) {
         inventory[currentSelectedItem].GetComponent<TextMeshProUGUI>().color = Color.white;
+        int oldIndex = currentSelectedItem;
         currentSelectedItem += scrollAction;
         if (currentSelectedItem == -1) {
             currentSelectedItem = inventory.Length - 1;
@@ -42,7 +59,9 @@ public class UILogic : MonoBehaviour {
         if (currentSelectedItem == inventory.Length) {
             currentSelectedItem = 0;
         }
+        int newIndex = currentSelectedItem;
         inventory[currentSelectedItem].GetComponent<TextMeshProUGUI>().color = Color.red;
+        player.GetComponent<InventoryHandler>().SwitchItem(oldIndex, newIndex);
     }
 
     public void UpdateInventory(GameObject[] array) {
@@ -56,13 +75,17 @@ public class UILogic : MonoBehaviour {
             inventory[i] = Instantiate(itemSlot, new Vector3(itemSlot.transform.position.x + offset, itemSlot.transform.position.y, itemSlot.transform.position.z), itemSlot.transform.rotation, transform.parent);
             if (array[i] != null) {
                 inventory[i].GetComponent<TextMeshProUGUI>().text = array[i].GetComponent<GunProperties>().Name;
+                inventory[i].GetComponentInChildren<Image>().enabled = true;
+                inventory[i].GetComponentInChildren<Image>().sprite = array[i].GetComponent<GunProperties>().Sprite;
             } else {
                 inventory[i].GetComponent<TextMeshProUGUI>().text = "null";
+                inventory[i].GetComponentInChildren<Image>().enabled = false;
+
             }
             offset += 300f;
         }
         UpdateSelectedItem(1);
-        UpdateSelectedItem(-1);
+        UpdateSelectedItem(-1);     //refresh
     }
 
     public void UpdateScore(int amount) {
@@ -71,10 +94,6 @@ public class UILogic : MonoBehaviour {
 
     public void UpdateHealth(int amount) {
         healthField.GetComponent<TextMeshProUGUI>().SetText(HEALTH_TEXT + amount.ToString());
-    }
-
-    public void DisableCycleInventory() {
-        inputActions.PlayerDefault.CycleInventory.Disable();
     }
 
     public void EnableGameOverScreen() {
@@ -86,8 +105,13 @@ public class UILogic : MonoBehaviour {
         SceneManager.LoadScene(0);
     }
 
+    public void DisableInput() {
+        inputActions.PlayerDefault.CycleInventory.Disable();
+        inputActions.PlayerDefault.DropWeapon.Disable();
+    }
+
     //getters
-    public float SelectedItem {
+    public int SelectedItem {
         get { return currentSelectedItem; }
     }
     public GameObject Item(int number) {
