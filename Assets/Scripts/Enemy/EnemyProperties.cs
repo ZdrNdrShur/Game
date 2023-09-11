@@ -4,15 +4,21 @@ public class EnemyProperties : MonoBehaviour {
 
     private const string playerTag = "Player";
 
-    [SerializeField] private int health = 100;
+    [SerializeField] private int maxHealth = 100;
+    private float health;
     [SerializeField] private int score = 10;
     [SerializeField] private int collisionDamage = 20;
+
+    private void Start() {
+        health = maxHealth;
+    }
 
     public void TakeDamage(int amount) {
         health -= amount;
         if (health <= 0) {
             Destroy(gameObject);
         }
+        GetComponentInChildren<EnemyHealthBar>().ReduceHealth(health, maxHealth);
     }
 
     private void OnCollisionEnter(Collision collision) {

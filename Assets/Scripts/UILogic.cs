@@ -16,16 +16,18 @@ public class UILogic : MonoBehaviour {
     [SerializeField] private GameObject itemSlot;
 
     private PlayerInputActions inputActions;
-    private GameObject[] inventory = new GameObject[0];
+    private GameObject[] inventory = new GameObject[0];     //Q: If I move the "= new GameObject[0]" to Start() I get an error. Why(am I not getting error now)?
 
-    [SerializeField] private float spawnedItemDistanceMultiplyer = 3;
+    [SerializeField] private float distanceBetweenItemSlots = 50f;
+    [SerializeField] private float spawnedItemDistanceMultiplyer = 3f;
 
-    private int currentSelectedItem = 0;
+    private int currentSelectedItem;
 
     private void Start() {
         inputActions = new PlayerInputActions();
         inputActions.PlayerDefault.CycleInventory.Enable();
         inputActions.PlayerDefault.DropWeapon.Enable();
+        currentSelectedItem = 0;
     }
 
     private void Update() {
@@ -49,6 +51,35 @@ public class UILogic : MonoBehaviour {
         }
     }
 
+    public void UpdateInventory(GameObject[] array) {
+        for (int i = 0; i < inventory.Length; i++) {
+            Destroy(inventory[i]);
+        }
+        inventory = new GameObject[array.Length];
+
+        float offset = transform.parent.GetComponent<RectTransform>().rect.width;
+        offset -= itemSlot.GetComponent<RectTransform>().rect.width * inventory.Length;
+        offset -= distanceBetweenItemSlots * (inventory.Length - 1);
+        offset /= 2;
+        offset -= itemSlot.GetComponent<RectTransform>().rect.width / 2;
+
+        for (int i = 0; i < array.Length; i++) {
+            inventory[i] = Instantiate(itemSlot, new Vector3(offset, itemSlot.transform.position.y, itemSlot.transform.position.z), itemSlot.transform.rotation, transform.parent);
+            if (array[i] != null) {
+                inventory[i].GetComponent<TextMeshProUGUI>().text = array[i].GetComponent<GunProperties>().Name;
+                inventory[i].GetComponentInChildren<Image>().enabled = true;
+                inventory[i].GetComponentInChildren<Image>().sprite = array[i].GetComponent<GunProperties>().Sprite;
+            } else {
+                inventory[i].GetComponent<TextMeshProUGUI>().text = "no item";
+                inventory[i].GetComponentInChildren<Image>().enabled = false;
+
+            }
+            offset += itemSlot.GetComponent<RectTransform>().rect.width + distanceBetweenItemSlots;
+        }
+        UpdateSelectedItem(1);
+        UpdateSelectedItem(-1);     //refresh
+    }
+
     private void UpdateSelectedItem(int scrollAction) {
         inventory[currentSelectedItem].GetComponent<TextMeshProUGUI>().color = Color.white;
         int oldIndex = currentSelectedItem;
@@ -64,36 +95,13 @@ public class UILogic : MonoBehaviour {
         player.GetComponent<InventoryHandler>().SwitchItem(oldIndex, newIndex);
     }
 
-    public void UpdateInventory(GameObject[] array) {
-        for (int i = 0; i < inventory.Length; i++) {
-            Destroy(inventory[i]);
-        }
-        inventory = new GameObject[array.Length];
-
-        float offset = 0f;
-        for (int i = 0; i < array.Length; i++) {
-            inventory[i] = Instantiate(itemSlot, new Vector3(itemSlot.transform.position.x + offset, itemSlot.transform.position.y, itemSlot.transform.position.z), itemSlot.transform.rotation, transform.parent);
-            if (array[i] != null) {
-                inventory[i].GetComponent<TextMeshProUGUI>().text = array[i].GetComponent<GunProperties>().Name;
-                inventory[i].GetComponentInChildren<Image>().enabled = true;
-                inventory[i].GetComponentInChildren<Image>().sprite = array[i].GetComponent<GunProperties>().Sprite;
-            } else {
-                inventory[i].GetComponent<TextMeshProUGUI>().text = "null";
-                inventory[i].GetComponentInChildren<Image>().enabled = false;
-
-            }
-            offset += 300f;
-        }
-        UpdateSelectedItem(1);
-        UpdateSelectedItem(-1);     //refresh
-    }
-
     public void UpdateScore(int amount) {
         scoreField.GetComponent<TextMeshProUGUI>().SetText(SCORE_TEXT + amount.ToString());
     }
 
-    public void UpdateHealth(int amount) {
-        healthField.GetComponent<TextMeshProUGUI>().SetText(HEALTH_TEXT + amount.ToString());
+    public void UpdateHealth(float amount, int maxAmount) {
+        healthField.GetComponent<Slider>().value = amount / maxAmount;
+        healthField.GetComponentInChildren<TextMeshProUGUI>().SetText(HEALTH_TEXT + amount.ToString());
     }
 
     public void EnableGameOverScreen() {

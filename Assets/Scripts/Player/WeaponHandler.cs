@@ -5,7 +5,8 @@ public class WeaponHandler : MonoBehaviour {
     [SerializeField] private GameObject UILogicManager;
     private PlayerInputActions inputActions;
     private InventoryHandler inventoryHandler;
-    private bool isShooting = false;
+
+    private bool isShooting;
 
     private void Start() {
         inputActions = new PlayerInputActions();
@@ -14,6 +15,7 @@ public class WeaponHandler : MonoBehaviour {
         inventoryHandler = GetComponent<InventoryHandler>();
         inputActions.PlayerDefault.Shoot.started += ctx => StartShooting();
         inputActions.PlayerDefault.Shoot.canceled += ctx => EndShooting();
+        isShooting = false;
     }
 
     private void Update() {

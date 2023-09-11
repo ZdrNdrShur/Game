@@ -5,18 +5,21 @@ public class PlayerProperties : MonoBehaviour {
     [SerializeField] private GameObject UILogicManager;
     private AudioHandler playerAudio;
 
-    [SerializeField] private int health = 100;
-    private int score = 0;
+    [SerializeField] private int maxHealth = 100;
+    private float health;
+    private int score;
 
     private void Start() {
         playerAudio = GetComponent<AudioHandler>();
+        health = maxHealth;
+        score = 0;
         UILogicManager.GetComponent<UILogic>().UpdateScore(score);
-        UILogicManager.GetComponent<UILogic>().UpdateHealth(health);
+        UILogicManager.GetComponent<UILogic>().UpdateHealth(health, maxHealth);
     }
 
     public void TakeDamage(int amount) {
         health -= amount;
-        UILogicManager.GetComponent<UILogic>().UpdateHealth(health);
+        UILogicManager.GetComponent<UILogic>().UpdateHealth(health, maxHealth);
         if (health <= 0) {
             gameObject.GetComponent<PlayerMovement>().DisableInput();
             gameObject.GetComponent<WeaponHandler>().DisableInput();
